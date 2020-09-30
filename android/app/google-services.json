@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1076510386480",
+    "firebase_url": "https://dasapp-1df49.firebaseio.com",
+    "project_id": "dasapp-1df49",
+    "storage_bucket": "dasapp-1df49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076510386480:android:b68e63671e6c46198640f5",
+        "android_client_info": {
+          "package_name": "com.dasapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076510386480-8qp96370nignr59kg6i4gb3fdrd7u0as.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dasapp",
+            "certificate_hash": "81574296d8248821d69e70ea687edee0d9df85f8"
+          }
+        },
+        {
+          "client_id": "1076510386480-vnnvdu3kns846iuj7f0807nkeorbigau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dasapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1076510386480-esi8sr14i64bbg1a295m1ik4vqlajn9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLdUkHN2Z_G6ui6ZXGHI-Y-vgwRE1Odr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076510386480-esi8sr14i64bbg1a295m1ik4vqlajn9d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
