@@ -504,10 +504,13 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
               child: new IconButton(
                 icon: new Icon(isShowSticker ? Icons.keyboard : Icons.face),
                 onPressed: () {
-                  setState(() {
-                    isShowSticker = !isShowSticker;
-                    FocusScope.of(context).unfocus();
-                  });
+                    try{
+                      setState(() {
+                        isShowSticker = !isShowSticker;
+                      });
+                      FocusScope.of(context).unfocus();
+                    }catch(e){
+                    }
                 },
                 color: appConfiguration.appColor,
               ),

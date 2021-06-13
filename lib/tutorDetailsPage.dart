@@ -5,7 +5,9 @@ import 'package:dasapp/hireTutor.dart';
 import 'package:dasapp/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'config.dart';
@@ -58,14 +60,31 @@ class _TutorDetailsPageState extends State<TutorDetailsPage> {
 
   void fetchTutorDetails(_id) async{
     try{
+      setState(() {
+        _loading = true;
+      });
       var url = '${appConfiguration.apiBaseUrl}fetchUserProfile';
       final request = await http.post(url,body:{'userId':_id});
       if(request.statusCode == 200) {
+
+        var data = jsonDecode(request.body);
+        if(data['profile']['onlineStatus'] !='online' || data.length < 1){
+          Fluttertoast.showToast(
+              msg: "Oops! Tutor not available",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          Navigator.pop(context);
+          return;
+        }
+        if(!mounted) return;
+
         setState(() {
           _loading = false;
-        });
-        var data = jsonDecode(request.body);
-        setState(() {
           _teacherDetails = data['profile'];
         });
       }
@@ -95,8 +114,24 @@ class _TutorDetailsPageState extends State<TutorDetailsPage> {
                   Navigator.pop(context);
                 },
               ),
+              actions: [
+                PopupMenuButton<int>(
+                  icon: Icon(Icons.more_vert,color: top ? Colors.white : Colors.black,),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Text("Share profile"),
+                    ),
+                  ],
+                  onSelected: (value){
+                    if(value == 1){
+                      Share.share('https://dasapp.page.link/?link=https://dasapp.biztrustgh.com/teacher?id%3D${_teacherDetails['user_id']}%26name%3D${_teacherDetails['first_name'].replaceAll(' ','%20')}-${_teacherDetails['last_name'].replaceAll(' ','%20')}&apn=com.dasapp&efr=1');
+                    }
+                  },
+                )
+              ],
               title: top ? Text(_teacherDetails['first_name']+" "+_teacherDetails['last_name'].substring(0,1)+'.',style: TextStyle(fontFamily: "Proxima",fontWeight: FontWeight.bold,),) : null,
-              flexibleSpace: FlexibleSpaceBar(
+              flexibleSpace: _loading ? FlexibleSpaceBar(background: Container(color: Color(0xffF7F7F7),child: Align(alignment: Alignment.center,child: CircularProgressIndicator(),),),) : FlexibleSpaceBar(
                 background: Container(
                   color: Color(0xffF7F7F7),
                   child: Container(
@@ -167,7 +202,7 @@ class _TutorDetailsPageState extends State<TutorDetailsPage> {
             ),
             SliverList(
               // Use a delegate to build items as they're scrolled on screen.
-              delegate: SliverChildListDelegate(
+              delegate: _loading ? SliverChildListDelegate([Container()]) : SliverChildListDelegate(
                 [
                   Padding(
                     padding: EdgeInsets.all(16),

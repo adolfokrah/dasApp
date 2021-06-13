@@ -47,7 +47,6 @@ class _WalletState extends State<Wallet> {
 
         if (!mounted) return;
         var data = jsonDecode(request.body);
-
         setState(() {
           _fetching = false;
           userSettlementAccountDetails = data['users_settlement_account'];

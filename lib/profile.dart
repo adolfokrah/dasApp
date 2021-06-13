@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config.dart';
@@ -294,6 +295,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.pop(context,updated);
                     },
                   ),
+                actions: userType == 'client' ? null : [
+                  PopupMenuButton<int>(
+                    icon: Icon(Icons.more_vert,color: top ? Colors.white : Colors.black,),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 1,
+                        child: Text("Share profile"),
+                      ),
+                    ],
+                    onSelected: (value){
+                      if(value == 1){
+                        Share.share('https://dasapp.page.link/?link=https://dasapp.biztrustgh.com/teacher?id%3D${_teacherDetails['user_id']}%26name%3D${_teacherDetails['first_name'].replaceAll(' ','%20')}-${_teacherDetails['last_name'].replaceAll(' ','%20')}&apn=com.dasapp&efr=1');
+                      }
+                    },
+                  )
+                ],
                   title: top ? Text(_teacherDetails['first_name']+" "+_teacherDetails['last_name'].substring(0,1)+'.',style: TextStyle(fontFamily: "Proxima",fontWeight: FontWeight.bold,),) : null,
                   flexibleSpace:  FlexibleSpaceBar(
                     background: Container(

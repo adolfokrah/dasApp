@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dasapp/config.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../login.dart';
 import '../tutorDetailsPage.dart';
@@ -44,6 +45,7 @@ class _ExploreTabState extends State<ExploreTab> {
 
   @override
   void initState(){
+    super.initState();
     getPopularCourses();
   }
 
@@ -56,9 +58,15 @@ class _ExploreTabState extends State<ExploreTab> {
       String url2 = '${appConfiguarion.apiBaseUrl}fetchProgramsToHome';
       SharedPreferences storage = await SharedPreferences.getInstance();
       String userDetails = storage.getString('userDetails');
-      print(userDetails);
+      String manual = storage.getString("manual");
+//      print(userDetails);
       String user_id = "0";
       if(!mounted) return;
+      if(manual == null){
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) => showInfoBox(context,appConfiguarion));
+      }
+
       if(userDetails != null){
         var userDetailsArray = jsonDecode(userDetails);
         user_id = userDetailsArray['user_id'];
@@ -121,7 +129,8 @@ class _ExploreTabState extends State<ExploreTab> {
 
   @override
   Widget build(BuildContext context) {
-   return SmartRefresher(
+
+    return SmartRefresher(
      controller: _refreshController,
      enablePullDown: true,
      enablePullUp: true,
@@ -141,6 +150,13 @@ class _ExploreTabState extends State<ExploreTab> {
               background: PreferredSize(
                 preferredSize: Size.fromHeight(0),
                 child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                        image: AssetImage("assets/images/home_banner.png"),
+                        fit: BoxFit.cover,
+                      )
+                  ),
                   child: Align(
                     child: Text(
                         'What are you looking for',
@@ -212,6 +228,42 @@ class _ExploreTabState extends State<ExploreTab> {
       ),
    );
   }
+
+}
+Future<void> showInfoBox(context,appConfiguration) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Align(alignment: Alignment.center,child: Text("New to dasApp?",style: TextStyle(fontFamily: "Proxima",fontSize: 20),),),
+              Padding(padding: EdgeInsets.only(top:20),child: Text("Have a look at our user manual to get started",textAlign: TextAlign.center,),)
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("View",style: TextStyle(fontFamily: "Proxima",color: appConfiguration.appColor),),
+            onPressed: (){
+              Navigator.pop(context);
+              launch("https://dasexams.com/dasapp/");
+            },
+          ),
+          FlatButton(
+            child: Text("Don't show this again",style: TextStyle(fontFamily: "Proxima",color: appConfiguration.appColor),),
+            onPressed: ()async{
+              Navigator.pop(context);
+              SharedPreferences storage = await SharedPreferences.getInstance();
+              storage.setString("manual", "true");
+            },
+          )
+        ]
+      );
+    },
+  );
 }
 //return the loading screen
 List <Widget> loadingScreen(user_type){
@@ -449,10 +501,13 @@ List <Widget> exploreContent(popularCourses,verifiedTeachers,subjects,_colors,ap
                       height:91,
                       width:100,
                       color: Colors.black12,
-                      child:  Hero(
-                          tag:"teacher"+verifiedTeachers[index]['user_id'],
-                          child: Image.network(appConfiguration.usersImageFolder+verifiedTeachers[index]['photo'])),
-                    ),
+                      child:  FittedBox(
+                        fit: BoxFit.cover,
+                        child: Hero(
+                            tag:"teacher"+verifiedTeachers[index]['user_id'],
+                            child: Image.network(appConfiguration.usersImageFolder+verifiedTeachers[index]['photo'])),
+                      ),
+                      ),
                     Padding(
                         padding: EdgeInsets.all(10),
                         child: Text(verifiedTeachers[index]['first_name'],overflow: TextOverflow.ellipsis,))
@@ -478,4 +533,6 @@ List <Widget> exploreContent(popularCourses,verifiedTeachers,subjects,_colors,ap
     )
 
   ];
+
+
 }

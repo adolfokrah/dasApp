@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dasapp/tutorDetailsPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -221,6 +222,17 @@ class _HomeState extends State<Home> {
       if(user_type == 'client') return;
       Navigator.push(
           context, MaterialPageRoute(builder: (BuildContext context) => JobDetails(job:data )));
+    }else if(deepLink.path == '/teacher'){
+      var teacherId = link.queryParametersAll['id'][0];
+      var teacherName = link.queryParametersAll['name'][0].split('-');
+      var data  = {
+        'user_id': teacherId,
+        'first_name': teacherName[0],
+        'last_name': teacherName[1],
+      };
+      if(user_type == 'teacher') return;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (BuildContext context) => TutorDetailsPage(teacher:data )));
     }
   }
 

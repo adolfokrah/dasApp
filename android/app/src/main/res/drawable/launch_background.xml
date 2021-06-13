@@ -4,10 +4,10 @@
     <item
         android:drawable="@color/darkblue"/>
 
-    <item
-        android:width="250px"
-        android:height="84px"
-        android:drawable="@mipmap/logo"
-        android:gravity="center" />
+     <item>
+        <bitmap
+            android:src="@mipmap/logo"
+            android:gravity="center"/>
+    </item>
 
 </layer-list>

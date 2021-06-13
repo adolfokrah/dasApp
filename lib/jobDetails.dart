@@ -51,6 +51,20 @@ class _JobDetailsState extends State<JobDetails> {
       final request = await http.post(url,body:{'job_id':jobDetails['job_id']});
       var data = jsonDecode(request.body);
       if(request.statusCode == 200) {
+        if(data.length < 1){
+          Fluttertoast.showToast(
+              msg: "Oops! Job not available",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          Navigator.pop(context);
+          return;
+        }
+        if(!mounted) return;
         setState(() {
           loading = false;
           jobDetails = data['job_info'];
