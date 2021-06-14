@@ -494,19 +494,15 @@ List <Widget> exploreContent(popularCourses,verifiedTeachers,subjects,_colors,ap
                 color: Colors.white,
                 elevation: 2,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+
                     Container(
                       padding: EdgeInsets.all(0),
                       height:91,
                       width:100,
                       color: Colors.black12,
-                      child:  FittedBox(
-                        fit: BoxFit.cover,
-                        child: Hero(
-                            tag:"teacher"+verifiedTeachers[index]['user_id'],
-                            child: Image.network(appConfiguration.usersImageFolder+verifiedTeachers[index]['photo'])),
-                      ),
+                      child:  Image.network(appConfiguration.usersImageFolder+verifiedTeachers[index]['photo'],height: 10,fit: BoxFit.fill,),
                       ),
                     Padding(
                         padding: EdgeInsets.all(10),
