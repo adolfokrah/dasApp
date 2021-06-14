@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dasapp/PrvacyPolicy.dart';
 import 'package:dasapp/changePassword.dart';
 import 'package:dasapp/profile.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _AccountState extends State<Account> {
   "key":"2",
   "title":"Privacy Policy",
   "caption":"Opens our privacy policy",
-  "type":"link",
+  "type":"page",
     "icon": Icons.verified_user,
     'link' : "https://dasexams.com/privacy-policy-2/"
   }
@@ -244,6 +245,10 @@ class _AccountState extends State<Account> {
 
               return InkWell(
                 onTap: (){
+                  if(menu[index]['title'] == 'Privacy Policy'){
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (BuildContext context) => PrivacyPolicy()));
+                  }
                   if(menu[index]['type']=='link'){
                     openUrl(menu[index]['link']);
                   }
