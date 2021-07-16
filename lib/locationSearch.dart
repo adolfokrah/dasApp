@@ -63,7 +63,7 @@ class _LocationSearchBodyState extends State<LocationSearchBody> {
     String url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?location=5.5353293,-0.426658&components=country:gh&input='+search+'&radius=50&key='+appConfiguration.googleMapsApiKey;
 
     try {
-      var response = await http.get(url);
+      var response = await http.get(Uri.parse(url));
       if (!mounted) return;
       setState(() {
         predictions = jsonDecode(response.body)['predictions'];
@@ -81,7 +81,7 @@ class _LocationSearchBodyState extends State<LocationSearchBody> {
         _loading = true;
       });
       String url = 'https://maps.googleapis.com/maps/api/geocode/json?place_id='+place_id+'&key='+appConfiguration.googleMapsApiKey;
-      var response = await http.get(url);
+      var response = await http.get(Uri.parse(url));
 
       var results  = jsonDecode(response.body);
 
@@ -116,13 +116,13 @@ class _LocationSearchBodyState extends State<LocationSearchBody> {
         PermissionStatus permission = await LocationPermissions().requestPermissions();
       }
 
-      Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
       //print(position.longitude);
 
 
       var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=${appConfiguration.googleMapsApiKey}';
-      var request = await http.get(url);
+      var request = await http.get(Uri.parse(url));
       if (!mounted) return;
       setState(() {
         _loading = false;

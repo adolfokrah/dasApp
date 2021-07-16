@@ -57,28 +57,34 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
     AndroidInitializationSettings('ic_stat_onesignal_default');
     var initializationSettingsIOs = IOSInitializationSettings();
     var initSetttings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOs);
+        android: initializationSettingsAndroid,iOS: initializationSettingsIOs);
 
     flutterLocalNotificationsPlugin.initialize(initSetttings,
         onSelectNotification: onSelectNotification);
 
 
-    OneSignal.shared.setNotificationReceivedHandler(_handleNotificationReceived);
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+      /// Display Notification, send null to not display, send notification to display
+      event.complete(event.notification);
+    });
+
     _notificationHandlers();
-  }
-
-  void _handleNotificationReceived(OSNotification notification) {
 
   }
+
+  // void _handleNotificationReceived(OSNotification notification) {
+  //
+  // }
 
 
   void _notificationHandlers(){
 
-    OneSignal.shared.setNotificationReceivedHandler((OSNotification notification)async{
-      var title = notification.payload.title;
-      var message = notification.payload.body;
-      var data = notification.payload.additionalData;
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+      var title = event.notification.title;
+      var message = event.notification.body;
+      var data = event.notification.additionalData;
       showNotification(title,message,data);
+
     });
 
   }
@@ -103,9 +109,9 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
     var android = AndroidNotificationDetails(
         'id', 'channel ', 'description',
         sound: RawResourceAndroidNotificationSound('iphone_notification'),
-        priority: Priority.High, importance: Importance.Max);
+        priority: Priority.high, importance: Importance.max);
     var iOS = IOSNotificationDetails();
-    var platform = new NotificationDetails(android, iOS);
+    var platform = new NotificationDetails(android: android, iOS: iOS);
     await flutterLocalNotificationsPlugin.show(
         0, title, message, platform,
         payload: jsonEncode(data));
@@ -158,7 +164,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
       });
       var url = '${appConfiguration.apiBaseUrl}fetchMessages';
       var data = {'user_id':userId,'job_id': widget.chat['job_id']};
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
 
       if(request.statusCode == 200){
         var data = jsonDecode(request.body);
@@ -250,7 +256,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         duration: const Duration(milliseconds: 300),
       );
       
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
 
       if(request.statusCode == 200){
         if(!mounted) {

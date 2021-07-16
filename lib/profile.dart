@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void fetchTutorDetails(_id) async{
     try{
       var url = '${appConfiguration.apiBaseUrl}fetchUserProfile';
-      final request = await http.post(url,body:{'userId':_id});
+      final request = await http.post(Uri.parse(url),body:{'userId':_id});
       if(request.statusCode == 200) {
         if (!mounted) return;
         setState(() {
@@ -170,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             response = await res.stream.bytesToString();
           }else{
-            var req = await http.post(url,body: data);
+            var req = await http.post(Uri.parse(url),body: data);
             response = req.body;
           }
           if (!mounted) return;

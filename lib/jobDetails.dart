@@ -48,7 +48,7 @@ class _JobDetailsState extends State<JobDetails> {
         loading = true;
       });
       var url = '${appConfiguration.apiBaseUrl}fetchJobDetails';
-      final request = await http.post(url,body:{'job_id':jobDetails['job_id']});
+      final request = await http.post(Uri.parse(url),body:{'job_id':jobDetails['job_id']});
       var data = jsonDecode(request.body);
       if(request.statusCode == 200) {
         if(data.length < 1){

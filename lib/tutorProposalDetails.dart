@@ -83,7 +83,7 @@ class _TutorProposalDetails extends State<TutorProposalDetails> {
   void fetchTutorDetails(_id) async{
     try{
       var url = '${appConfiguration.apiBaseUrl}fetchUserProfile';
-      final request = await http.post(url,body:{'userId':_id});
+      final request = await http.post(Uri.parse(url),body:{'userId':_id});
 
       if(request.statusCode == 200) {
 
@@ -141,7 +141,7 @@ class _TutorProposalDetails extends State<TutorProposalDetails> {
         });
 
         var url = '${appConfiguration.apiBaseUrl}acceptProposal';
-        final request = await http.post(url,body:{'job_id':_teacherDetails['job_id'].toString(),'user_id':_teacherDetails['user_id'].toString(),'amount': _teacherDetails['original_charged']});
+        final request = await http.post(Uri.parse(url),body:{'job_id':_teacherDetails['job_id'].toString(),'user_id':_teacherDetails['user_id'].toString(),'amount': _teacherDetails['original_charged']});
 
         if(request.statusCode == 200) {
           print(request.body);

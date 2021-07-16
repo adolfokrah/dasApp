@@ -58,7 +58,7 @@ class _ChatState extends State<Chat> {
       });
       var url = '${appConfiguration.apiBaseUrl}fetchUserChats';
       var data = {'user_id':userId,'user_type': userType};
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
 
       if(request.statusCode == 200){
         var data = jsonDecode(request.body);

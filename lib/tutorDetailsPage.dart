@@ -64,7 +64,7 @@ class _TutorDetailsPageState extends State<TutorDetailsPage> {
         _loading = true;
       });
       var url = '${appConfiguration.apiBaseUrl}fetchUserProfile';
-      final request = await http.post(url,body:{'userId':_id});
+      final request = await http.post(Uri.parse(url),body:{'userId':_id});
       if(request.statusCode == 200) {
 
         var data = jsonDecode(request.body);

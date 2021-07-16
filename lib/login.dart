@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
           "validatePass": social  ? "no" : "yes"
 
         };
-        var response = await http.post(url,body:data);
+        var response = await http.post(Uri.parse(url),body:data);
         setState(() {
           isLoading = false;
         });
@@ -149,8 +149,8 @@ class _LoginState extends State<Login> {
       switch (result.status) {
         case FacebookLoginStatus.loggedIn:
           final token = result.accessToken.token;
-          final graphResponse = await http.get(
-              'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token='+token);
+          final graphResponse = await http.get(Uri.parse(
+              'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token='+token));
               final profile = jsonDecode(graphResponse.body);
 
               var data = {

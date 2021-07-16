@@ -53,7 +53,7 @@ class _ExploreTabState extends State<ExploreTab> {
     try{
 
       String url = '${appConfiguarion.apiBaseUrl}fetchPopularCourses';
-      var response = await http.get(url);
+      var response = await http.get(Uri.parse(url));
 
       String url2 = '${appConfiguarion.apiBaseUrl}fetchProgramsToHome';
       SharedPreferences storage = await SharedPreferences.getInstance();
@@ -80,7 +80,7 @@ class _ExploreTabState extends State<ExploreTab> {
         }
       }
 
-      var responseTwo = await http.post(url2,body:{"userId": user_id});
+      var responseTwo = await http.post(Uri.parse(url2),body:{"userId": user_id});
       setState(() {
         verfiedTeacers = jsonDecode(responseTwo.body)['verified_teachers'];
         subjects = jsonDecode(responseTwo.body)["0"];

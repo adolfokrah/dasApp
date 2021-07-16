@@ -40,14 +40,14 @@ class _HomeState extends State<Home> {
     getUserDetails();
     initDynamicLinks();
     setupOneSignalNotification();
-    OneSignal.shared.setNotificationReceivedHandler(_handleNotificationReceived);
+    // OneSignal.shared.setNotificationOpenedHandler(_handleNotificationReceived);
     _notificationHandlers();
 
     var initializationSettingsAndroid =
     AndroidInitializationSettings('ic_stat_onesignal_default');
     var initializationSettingsIOs = IOSInitializationSettings();
     var initSetttings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOs);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
     flutterLocalNotificationsPlugin.initialize(initSetttings,
         onSelectNotification: onSelectNotification);
@@ -77,16 +77,10 @@ class _HomeState extends State<Home> {
     //Remove this method to stop OneSignal Debugging
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
-    OneSignal.shared.init(
-        "980bcbe3-1cc2-49ed-816e-b68e2ff0f88d",
-        iOSSettings: {
-          OSiOSSettings.autoPrompt: false,
-          OSiOSSettings.inAppLaunchUrl: false
-        }
-    );
+    OneSignal.shared.setAppId("980bcbe3-1cc2-49ed-816e-b68e2ff0f88d");
 
 
-    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.none);
+    // OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.none);
 
     getplayerId();
 
@@ -95,9 +89,9 @@ class _HomeState extends State<Home> {
   }
 
   void getplayerId()async{
-    var status = await OneSignal.shared.getPermissionSubscriptionState();
+    var status = await OneSignal.shared.getDeviceState();
 
-    var playerId = status.subscriptionStatus.userId;
+    var playerId = status.userId;
 
     try{
       String url = '${appConfiguration.apiBaseUrl}updateUserToken';
@@ -105,7 +99,7 @@ class _HomeState extends State<Home> {
         "user_id": userId,
         "token":playerId
       };
-      var response = await http.post(url,body:data);
+      var response = await http.post(Uri.parse(url),body:data);
 
     }catch(e){
 
@@ -113,17 +107,17 @@ class _HomeState extends State<Home> {
   }
 
 
-  void _handleNotificationReceived(OSNotification notification) {
-
-  }
+  // void _handleNotificationReceived(OSNotification notification) {
+  //
+  // }
 
   showNotification(title,message,data) async {
     var android = AndroidNotificationDetails(
         'id', 'channel ', 'description',
         sound: RawResourceAndroidNotificationSound('iphone_notification'),
-        priority: Priority.High, importance: Importance.Max);
+        priority:Priority.high, importance: Importance.max);
     var iOS = IOSNotificationDetails();
-    var platform = new NotificationDetails(android, iOS);
+    var platform = new NotificationDetails(android: android, iOS: iOS);
     await flutterLocalNotificationsPlugin.show(
         0, title, message, platform,
         payload: jsonEncode(data));
@@ -131,13 +125,14 @@ class _HomeState extends State<Home> {
   
   void _notificationHandlers(){
 
-    OneSignal.shared.setNotificationReceivedHandler((OSNotification notification)async{
-      var title = notification.payload.title;
-      var message = notification.payload.body;
-      var data = notification.payload.additionalData;
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+      var title = event.notification.title;
+      var message = event.notification.body;
+      var data = event.notification.additionalData;
       showNotification(title,message,data);
 
     });
+
 
 
 
@@ -145,7 +140,7 @@ class _HomeState extends State<Home> {
       // will be called whenever a notification is opened/button pressed.
 
       try{
-        var json = result.notification.payload.additionalData;
+        var json = result.notification.additionalData;
 
         if(json['chat'] != null){
           var data = {

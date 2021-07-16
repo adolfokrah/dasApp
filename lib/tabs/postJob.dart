@@ -44,7 +44,7 @@ class _PostJobs extends State<PostJobs> {
       String url = '${appConfiguration.apiBaseUrl}postJob';
       var data = jobDetails;
       data['skills'] = skills.join(',');
-      var response = await http.post(url,body:data);
+      var response = await http.post(Uri.parse(url),body:data);
       setState(() {
         _loading = false;
       });

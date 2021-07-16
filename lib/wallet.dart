@@ -42,7 +42,7 @@ class _WalletState extends State<Wallet> {
   Future<void> fetchWalletDetails()async{
     try{
       var url = '${appConfiguration.apiBaseUrl}fetchUserTransactions';
-      final request = await http.post(url,body:{'user_id':widget.userId});
+      final request = await http.post(Uri.parse(url),body:{'user_id':widget.userId});
       if(request.statusCode == 200) {
 
         if (!mounted) return;
@@ -79,7 +79,7 @@ class _WalletState extends State<Wallet> {
         "account_number": accountNumberController.text,
         "bank_code": bankData['code']
       };
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
       if(request.statusCode == 200) {
 
         if (!mounted) return;

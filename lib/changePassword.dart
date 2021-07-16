@@ -36,7 +36,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             'newPass' : newPasswordController.text,
             'oldPass':  oldPasswordController.text
           };
-          var response = await http.post(url,body:data);
+          var response = await http.post(Uri.parse(url),body:data);
           setState(() {
             _loading = false;
           });

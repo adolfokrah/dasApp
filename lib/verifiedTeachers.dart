@@ -47,11 +47,11 @@ class _VerifiedTeachersState extends State<VerifiedTeachers> {
           fontSize: 16.0
       );
 
-      Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       var lat = position.latitude.toString();
       var lng = position.longitude.toString();
       var url = '${appConfiguration.apiBaseUrl}fetchVerifiedTeachers';
-      var request = await http.post(url,body:{'userId':"0",'lat':lat,'lng':lng});
+      var request = await http.post(Uri.parse(url),body:{'userId':"0",'lat':lat,'lng':lng});
       var data = jsonDecode(request.body);
       if(request.statusCode == 200) {
         setState(() {

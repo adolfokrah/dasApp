@@ -55,7 +55,7 @@ class _ForgottenPasswordState extends State<ForgottenPassword> {
           "email": emailController.text,
 
         };
-        var response = await http.post(url,body:data);
+        var response = await http.post(Uri.parse(url),body:data);
         setState(() {
           isLoading = false;
         });

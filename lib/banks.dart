@@ -31,7 +31,7 @@ class _BanksState extends State<Banks> {
         _fetching = true;
       });
       var url = '${appConfiguration.apiBaseUrl}getBanks';
-      final request = await http.get(url);
+      final request = await http.get(Uri.parse(url));
       if(request.statusCode == 200) {
 
         if (!mounted) return;

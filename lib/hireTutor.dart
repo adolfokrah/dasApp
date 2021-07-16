@@ -71,7 +71,7 @@ class _HireTutorState extends State<HireTutor> {
           "lat": lat,
           "lng": lng
         };
-        var response = await http.post(url,body:data);
+        var response = await http.post(Uri.parse(url),body:data);
 
         setState(() {
           _loading = false;

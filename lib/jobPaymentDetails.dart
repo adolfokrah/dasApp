@@ -75,7 +75,7 @@ class _JobPaymentDetailState extends State<JobPaymentDetail> {
     try{
 
       var url = '${appConfiguration.apiBaseUrl}fetchJobDetails';
-      final request = await http.post(url,body:{'job_id':jobId});
+      final request = await http.post(Uri.parse(url),body:{'job_id':jobId});
 
       var data = jsonDecode(request.body);
 
@@ -175,7 +175,7 @@ class _JobPaymentDetailState extends State<JobPaymentDetail> {
             "review": reviewController.text
           };
 
-          final request = await http.post(url,body:data);
+          final request = await http.post(Uri.parse(url),body:data);
           if(request.statusCode == 200) {
             setState(() {
               requesting = false;
@@ -227,7 +227,7 @@ class _JobPaymentDetailState extends State<JobPaymentDetail> {
       var data = {
         "job_id": job['job_id'].toString()
       };
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
       if(request.statusCode == 200) {
         setState(() {
           requesting = false;

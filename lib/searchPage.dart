@@ -75,7 +75,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
         });
         var url = '${appConfiguration.apiBaseUrl}fetchTeachersJobs';
         var data = {'userId':userId,'lat':lat,'lng':lng,'search':search};
-        final request = await http.post(url,body:data);
+        final request = await http.post(Uri.parse(url),body:data);
         if(request.statusCode == 200){
           if (!mounted) return;
           setState(() {
@@ -146,10 +146,10 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
             fontSize: 16.0
         );
 
-        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
         var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=${appConfiguration.googleMapsApiKey}';
-        var request = await http.get(url);
+        var request = await http.get(Uri.parse(url));
 
 
         var results = jsonDecode(request.body);

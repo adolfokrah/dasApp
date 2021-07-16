@@ -54,7 +54,7 @@ class _MyJobsState extends State<MyJobs> {
       });
       var url = '${appConfiguration.apiBaseUrl}fetchUserJobs';
       var data = {'user_id':userId,'action':status,'user_type': userType};
-      final request = await http.post(url,body:data);
+      final request = await http.post(Uri.parse(url),body:data);
       if(request.statusCode == 200){
         var data = jsonDecode(request.body);
         if(!mounted) return;

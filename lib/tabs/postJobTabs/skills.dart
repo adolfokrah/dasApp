@@ -101,7 +101,7 @@ class _JobSkills extends State<JobSkills> {
                       try {
                         if(courses.length == 0){
                           String url = '${appConfiguration.apiBaseUrl}fetchProgramsToHome';
-                          var response = await http.post(url,body:{'userId':"0"});
+                          var response = await http.post(Uri.parse(url),body:{'userId':"0"});
                           var popularCourses = jsonDecode(response.body);
                           setState(() {
                             courses = popularCourses["0"];

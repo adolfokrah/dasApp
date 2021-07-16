@@ -48,7 +48,7 @@ class _ProposeToJobState extends State<ProposeToJob> {
             "original_charged": totalAmountToBeCharged.toString(),
             "amount": widget.job['job_budget_to']
           };
-          final request = await http.post(url,body:data);
+          final request = await http.post(Uri.parse(url),body:data);
           //var data = jsonDecode(request.body);
           setState(() {
             _loading = false;
